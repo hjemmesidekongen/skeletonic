@@ -1,0 +1,6 @@
+src/vendor
+node_modules/
+!src/scss/**/vendor
+.idea
+.DS_store
+others/
