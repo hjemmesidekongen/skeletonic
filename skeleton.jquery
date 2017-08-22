@@ -5,64 +5,59 @@
 // | This jQuery script is written by:
 // |
 // | Morten Nissen
-// | hjemmesidekongen.dk
+// | https://hjemmesidekongen.dk
+// | License: MIT
 // |
 
-;(function($, window, document, undefined) {
-    var PLUGIN_NAME = '***',
-        PLUGIN_VERSION = '0.1',
-        PLUGIN_OPTIONS = {};
+;(function ($, window, document, undefined) {
+    var pluginName = "***",
+        dataKey = "plugin_" + pluginName;
 
-    function Plugin(element, options) {
-        this.name = PLUGIN_NAME;
-        this.version = PLUGIN_VERSION;
-        this.settings = PLUGIN_OPTIONS;
+    var _bootstrap = function() {};
+    
+    var _events = function() {};
+
+    var _privateMethod = function() {};
+
+    var Plugin = function (element, options) {
         this.element = element;
         this.$element = $(this.element);
-
-        this._setOptions(options);
-    };
-
-    Plugin.prototype._setOptions = function(options) {
-        this.settings = $.extend({}, this.settings, options);
         
-        this._setup();
+        this.options = {};
         
-        this.init();
+        this.init(options);
     };
 
-    Plugin.prototype._getOptions = function() {
-        return this.settings;
+    Plugin.prototype = {
+        init: function (options) {
+            $.extend(this.options, options);
+
+            _bootstrap();
+            _events();
+        },
+        
+        publicMethod: function () {}
     };
 
-    Plugin.prototype.options = function(options) {
-        return typeof options === 'object' ? this._setOptions(options) : this._getOptions();
-    };
+    /*
+     * Plugin wrapper, preventing against multiple instantiations and
+     * return plugin instance.
+     */
+    $.fn[pluginName] = function (options) {
 
-    Plugin.prototype._setup = function() {};
+        var plugin = this.data(dataKey);
 
-    Plugin.prototype.init = function() {};
-
-    Plugin.prototype.close = function() {};
-
-    $.fn[PLUGIN_NAME] = function() {
-        var args = arguments;
-
-        return this.each(function() {
-            var pluginObject = $(this).data('plugin_' + PLUGIN_NAME);
-
-            if (!pluginObject && (typeof args[0] === 'object' || args.length === 0)) {
-                $(this).data('plugin_' + PLUGIN_NAME, new Plugin(this, args[0]));
-            } 
-            else if (typeof args[0] === 'string') {
-                var method = args[0].replace('_', '');
-
-                if (pluginObject[method]) {
-                    return pluginObject[method].apply(pluginObject, Array.prototype.slice.call(args, 1));
-                }
+        // has plugin instantiated ?
+        if (plugin instanceof Plugin) {
+            // if have options arguments, call plugin.init() again
+            if (typeof options !== 'undefined') {
+                plugin.init(options);
             }
-
-            return pluginObject;
-        });
+        } else {
+            plugin = new Plugin(this, options);
+            this.data(dataKey, plugin);
+        }
+        
+        return plugin;
     };
 }(jQuery, window, document));
