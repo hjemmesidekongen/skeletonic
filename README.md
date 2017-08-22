@@ -1,2 +1,3 @@
 # jQuery skeleton
-Heavily inspired by: https://github.com/jquery-boilerplate/jquery-boilerplate/wiki/jQuery-boilerplate-and-demo
+
+Heavily inspired by: http://jonathannicol.com/blog/2012/05/06/a-jquery-plugin-boilerplate/
